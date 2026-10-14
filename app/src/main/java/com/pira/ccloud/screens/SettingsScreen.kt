@@ -349,8 +349,7 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .clickable { isExpanded = !isExpanded }
                         .focusable()
-                        .focusRequester(themeCardFocusRequester)
-                        ,
+                        .focusRequester(themeCardFocusRequester),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
