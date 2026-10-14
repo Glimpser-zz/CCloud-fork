@@ -16,6 +16,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -349,15 +350,7 @@ fun SettingsScreen(
                         .clickable { isExpanded = !isExpanded }
                         .focusable()
                         .focusRequester(themeCardFocusRequester)
-                        .onKeyEvent { keyEvent ->
-                            when (keyEvent.key) {
-                                Key.Enter, Key.Spacebar -> {
-                                    isExpanded = !isExpanded
-                                    true // Handled
-                                }
-                                else -> false // Let default handling occur
-                            }
-                        },
+                        ,
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -388,7 +381,7 @@ fun SettingsScreen(
                         }
                         
                         AnimatedVisibility(visible = isExpanded) {
-                            Column(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.fillMaxWidth().focusGroup()) {
                                 // Theme Mode Section
                                 Text(
                                     text = "Theme Mode",
@@ -1188,7 +1181,7 @@ fun ThemeModeOption(
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = { onSelect(mode) }
+            onClick = null
         )
         Text(
             text = label,
