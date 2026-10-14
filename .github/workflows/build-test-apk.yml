@@ -3,7 +3,7 @@ name: Build Android TV test APK
 on:
   push:
     branches:
-      - fix/android-tv-dpad-focus
+      - fix/android-tv-theme-dpad-v2
     paths:
       - '.github/workflows/build-test-apk.yml'
       - 'app/**'
@@ -23,7 +23,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          ref: fix/android-tv-dpad-focus
+          ref: fix/android-tv-theme-dpad-v2
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
