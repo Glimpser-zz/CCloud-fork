@@ -36,13 +36,6 @@ fun AboutScreen(navController: NavController?) {
                     contentDescription = "Back"
                 )
             }
-            Text(
-                text = "About",
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp),
-                style = MaterialTheme.typography.titleLarge
-            )
         }
 
         Column(
