@@ -128,11 +128,10 @@ fun SidebarNavigation(navController: NavController) {
                                     // Avoid multiple copies of the same destination when
                                     // reselecting the same item
                                     launchSingleTop = true
-                                    // Restore state when reselecting a previously selected item
-                                    restoreState = true
-                                    // Pop up to the current destination to avoid building up a large stack
+                                    // Always show the selected destination instead of restoring a stale screen.
+                                    restoreState = false
                                     popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
+                                        saveState = false
                                     }
                                 }
                             }
