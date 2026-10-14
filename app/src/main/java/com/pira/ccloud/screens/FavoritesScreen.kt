@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -553,9 +554,7 @@ fun FavoritesScreen(navController: NavController) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .focusable()
-                    .focusRequester(groupCardFocusRequester),
+                    .padding(horizontal = 16.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -582,47 +581,39 @@ fun FavoritesScreen(navController: NavController) {
                     
                     // Display groups as selectable chips
                     androidx.compose.foundation.lazy.LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth().focusGroup(),
                         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp)
                     ) {
                         items(groups) { group ->
                             Box {
                                 var showGroupMenu by remember { mutableStateOf(false) }
+                                var isGroupFocused by remember { mutableStateOf(false) }
                                 
                                 Card(
                                     modifier = Modifier
                                         .padding(vertical = 4.dp)
+                                        .onFocusChanged { isGroupFocused = it.isFocused }
                                         .clickable {
                                             selectedGroup = group
-                                            // Load favorites for this group
                                             favorites = if (group.isDefault) {
                                                 StorageUtils.loadAllFavorites(context)
                                             } else {
                                                 StorageUtils.getFavoritesInGroup(context, group.id)
                                             }
                                         }
-                                        .focusable()
-                                        .onKeyEvent { keyEvent ->
-                                            when (keyEvent.key) {
-                                                Key.Enter, Key.Spacebar -> {
-                                                    selectedGroup = group
-                                                    // Load favorites for this group
-                                                    favorites = if (group.isDefault) {
-                                                        StorageUtils.loadAllFavorites(context)
-                                                    } else {
-                                                        StorageUtils.getFavoritesInGroup(context, group.id)
-                                                    }
-                                                    true // Handled
-                                                }
-                                                else -> false // Let default handling occur
-                                            }
-                                        },
+                                        .focusable(),
                                     shape = RoundedCornerShape(16.dp),
-                                    elevation = CardDefaults.cardElevation(defaultElevation = if (selectedGroup?.id == group.id) 4.dp else 0.dp),
-                                    colors = if (selectedGroup?.id == group.id) {
-                                        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-                                    } else {
-                                        CardDefaults.cardColors()
+                                    elevation = CardDefaults.cardElevation(
+                                        defaultElevation = when {
+                                            isGroupFocused -> 10.dp
+                                            selectedGroup?.id == group.id -> 4.dp
+                                            else -> 0.dp
+                                        }
+                                    ),
+                                    colors = when {
+                                        isGroupFocused -> CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
+                                        selectedGroup?.id == group.id -> CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+                                        else -> CardDefaults.cardColors()
                                     }
                                 ) {
                                     Row(
