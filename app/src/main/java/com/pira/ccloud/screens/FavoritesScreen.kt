@@ -9,6 +9,7 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -553,10 +555,7 @@ fun FavoritesScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .focusable()
-                    .focusRequester(groupCardFocusRequester)
-                    .focusProperties {
-                        down = favoritesCardFocusRequester
-                    },
+                    .focusRequester(groupCardFocusRequester),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -753,12 +752,7 @@ fun FavoritesScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp)
-                        .weight(1f)
-                        .focusable()
-                        .focusRequester(favoritesCardFocusRequester)
-                        .focusProperties {
-                            up = groupCardFocusRequester
-                        },
+                        .weight(1f),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
                 ) {
@@ -812,6 +806,7 @@ fun FavoriteItemCard(
 ) {
     var showMenu by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
     
     Card(
         modifier = Modifier
@@ -819,6 +814,12 @@ fun FavoriteItemCard(
             .clickable { onClick() }
             .focusable()
             .focusRequester(focusRequester)
+            .onFocusChanged { isFocused = it.isFocused }
+            .border(
+                width = if (isFocused) 3.dp else 0.dp,
+                color = MaterialTheme.colorScheme.primary,
+                shape = RoundedCornerShape(12.dp)
+            )
             .onKeyEvent { keyEvent ->
                 when (keyEvent.key) {
                     Key.Enter, Key.Spacebar -> {
