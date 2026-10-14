@@ -337,6 +337,7 @@ fun SettingsScreen(
         // Theme Settings Card
         item {
             var isExpanded by remember { mutableStateOf(false) }
+            var isThemeCardFocused by remember { mutableStateOf(false) }
             val focusRequester = remember { FocusRequester() }
             
             AnimatedVisibility(
@@ -349,8 +350,12 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .clickable { isExpanded = !isExpanded }
                         .focusable()
-                        .focusRequester(themeCardFocusRequester),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        .focusRequester(themeCardFocusRequester)
+                        .onFocusChanged { isThemeCardFocused = it.isFocused },
+                    elevation = CardDefaults.cardElevation(defaultElevation = if (isThemeCardFocused) 10.dp else 4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isThemeCardFocused) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
+                    )
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
