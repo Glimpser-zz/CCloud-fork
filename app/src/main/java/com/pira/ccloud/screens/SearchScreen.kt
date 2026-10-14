@@ -60,6 +60,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -84,11 +85,13 @@ fun SearchScreen(
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
     
-    // Request focus when the screen is first displayed to ensure keyboard opens on TV
+    // Request focus and explicitly show the software keyboard on Android TV.
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+        keyboardController?.show()
     }
     
     Column(
@@ -103,9 +106,13 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
+                .onFocusChanged { state ->
+                    if (state.isFocused) keyboardController?.show()
+                }
                 .clickable { 
-                    // Ensure keyboard opens when clicking on the TextField on TV
+                    // Center/OK on the TV remote should open the on-screen keyboard.
                     focusRequester.requestFocus()
+                    keyboardController?.show()
                 },
             placeholder = { 
                 Text(
