@@ -73,6 +73,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.delay
 import com.pira.ccloud.R
 import com.pira.ccloud.data.model.Country
 import com.pira.ccloud.data.model.Poster
