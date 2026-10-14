@@ -13,6 +13,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
@@ -57,6 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -347,9 +350,6 @@ fun SettingsScreen(
                         .clickable { isExpanded = !isExpanded }
                         .focusable()
                         .focusRequester(themeCardFocusRequester)
-                        .focusProperties {
-                            down = videoCardFocusRequester
-                        }
                         .onKeyEvent { keyEvent ->
                             when (keyEvent.key) {
                                 Key.Enter, Key.Spacebar -> {
@@ -516,10 +516,6 @@ fun SettingsScreen(
                         .clickable { isExpanded = !isExpanded }
                         .focusable()
                         .focusRequester(videoCardFocusRequester)
-                        .focusProperties {
-                            up = themeCardFocusRequester
-                            down = aboutCardFocusRequester
-                        }
                         .onKeyEvent { keyEvent ->
                             when (keyEvent.key) {
                                 Key.Enter, Key.Spacebar -> {
@@ -865,10 +861,6 @@ fun SettingsScreen(
                         .clickable { navController?.navigate("about") }
                         .focusable()
                         .focusRequester(aboutCardFocusRequester)
-                        .focusProperties {
-                            up = videoCardFocusRequester
-                            down = updateCardFocusRequester
-                        }
                         .onKeyEvent { keyEvent ->
                             when (keyEvent.key) {
                                 Key.Enter, Key.Spacebar -> {
@@ -941,10 +933,6 @@ fun SettingsScreen(
                         }
                         .focusable()
                         .focusRequester(updateCardFocusRequester)
-                        .focusProperties {
-                            up = aboutCardFocusRequester
-                            down = resetCardFocusRequester
-                        }
                         .onKeyEvent { keyEvent ->
                             when (keyEvent.key) {
                                 Key.Enter, Key.Spacebar -> {
@@ -1026,9 +1014,6 @@ fun SettingsScreen(
                         .clickable { showResetDialog = true }
                         .focusable()
                         .focusRequester(resetCardFocusRequester)
-                        .focusProperties {
-                            up = updateCardFocusRequester
-                        }
                         .onKeyEvent { keyEvent ->
                             when (keyEvent.key) {
                                 Key.Enter, Key.Spacebar -> {
@@ -1177,6 +1162,7 @@ fun ThemeModeOption(
     onSelect: (ThemeMode) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
     
     Row(
         modifier = Modifier
@@ -1193,6 +1179,11 @@ fun ThemeModeOption(
                     else -> false // Let default handling occur
                 }
             }
+            .onFocusChanged { isFocused = it.isFocused }
+            .background(
+                if (isFocused) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else Color.Transparent,
+                RoundedCornerShape(8.dp)
+            )
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -1216,6 +1207,7 @@ fun ColorOption(
     label: String? = null
 ) {
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
     
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -1228,6 +1220,12 @@ fun ColorOption(
                 .clickable { onSelect(color) }
                 .focusable()
                 .focusRequester(focusRequester)
+                .onFocusChanged { isFocused = it.isFocused }
+                .border(
+                    width = if (isFocused) 3.dp else 0.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape
+                )
                 .onKeyEvent { keyEvent ->
                     when (keyEvent.key) {
                         Key.Enter, Key.Spacebar -> {
@@ -1355,6 +1353,7 @@ fun ColorOptionButton(
     label: String? = null
 ) {
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
     
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -1383,6 +1382,12 @@ fun ColorOptionButton(
                 .clickable(onClick = onClick)
                 .focusable()
                 .focusRequester(focusRequester)
+                .onFocusChanged { isFocused = it.isFocused }
+                .border(
+                    width = if (isFocused) 3.dp else 0.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(4.dp)
+                )
                 .onKeyEvent { keyEvent ->
                     when (keyEvent.key) {
                         Key.Enter, Key.Spacebar -> {
@@ -1429,6 +1434,7 @@ fun FontOption(
     onSelect: (FontType) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
+    var isFocused by remember { mutableStateOf(false) }
     
     Row(
         modifier = Modifier
@@ -1445,6 +1451,11 @@ fun FontOption(
                     else -> false // Let default handling occur
                 }
             }
+            .onFocusChanged { isFocused = it.isFocused }
+            .background(
+                if (isFocused) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else Color.Transparent,
+                RoundedCornerShape(8.dp)
+            )
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
