@@ -346,12 +346,7 @@ fun SettingsScreen(
                 exit = fadeOut(animationSpec = tween(400)) + slideOutVertically(animationSpec = tween(400))
             ) {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { isExpanded = !isExpanded }
-                        .onFocusChanged { isThemeCardFocused = it.isFocused }
-                        .focusRequester(themeCardFocusRequester)
-                        .focusable(),
+                    modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = if (isThemeCardFocused) 10.dp else 4.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isThemeCardFocused) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
@@ -361,6 +356,10 @@ fun SettingsScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .clickable { isExpanded = !isExpanded }
+                                .onFocusChanged { isThemeCardFocused = it.isFocused }
+                                .focusRequester(themeCardFocusRequester)
+                                .focusable()
                                 .padding(bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -507,26 +506,16 @@ fun SettingsScreen(
                 exit = fadeOut(animationSpec = tween(600)) + slideOutVertically(animationSpec = tween(600))
             ) {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { isExpanded = !isExpanded }
-                        .focusable()
-                        .focusRequester(videoCardFocusRequester)
-                        .onKeyEvent { keyEvent ->
-                            when (keyEvent.key) {
-                                Key.Enter, Key.Spacebar -> {
-                                    isExpanded = !isExpanded
-                                    true // Handled
-                                }
-                                else -> false // Let default handling occur
-                            }
-                        },
+                    modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .clickable { isExpanded = !isExpanded }
+                                .focusRequester(videoCardFocusRequester)
+                                .focusable()
                                 .padding(bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -551,7 +540,7 @@ fun SettingsScreen(
                         }
                         
                         AnimatedVisibility(visible = isExpanded) {
-                            Column(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.fillMaxWidth().focusGroup()) {
                                 Text(
                                     text = "Seek Time: ${videoPlayerSettings.seekTimeSeconds} seconds",
                                     style = MaterialTheme.typography.bodyLarge,
@@ -679,26 +668,16 @@ fun SettingsScreen(
                 exit = fadeOut(animationSpec = tween(800)) + slideOutVertically(animationSpec = tween(800))
             ) {
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable { isExpanded = !isExpanded }
-                        .focusable()
-                        .focusRequester(remember { FocusRequester() })
-                        .onKeyEvent { keyEvent ->
-                            when (keyEvent.key) {
-                                Key.Enter, Key.Spacebar -> {
-                                    isExpanded = !isExpanded
-                                    true // Handled
-                                }
-                                else -> false // Let default handling occur
-                            }
-                        },
+                    modifier = Modifier.fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .clickable { isExpanded = !isExpanded }
+                                .focusRequester(resetCardFocusRequester)
+                                .focusable()
                                 .padding(bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -723,7 +702,7 @@ fun SettingsScreen(
                         }
                         
                         AnimatedVisibility(visible = isExpanded) {
-                            Column(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.fillMaxWidth().focusGroup()) {
                                 Text(
                                     text = "Select Font",
                                     style = MaterialTheme.typography.titleMedium,
