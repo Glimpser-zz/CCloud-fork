@@ -128,7 +128,6 @@ fun SettingsScreen(
     var watchedEpisodesCacheSize by remember { mutableStateOf(0L) }
     
     // Focus requesters for handling TV remote navigation
-    val focusRequester = remember { FocusRequester() }
     val themeCardFocusRequester = remember { FocusRequester() }
     val videoCardFocusRequester = remember { FocusRequester() }
     val aboutCardFocusRequester = remember { FocusRequester() }
@@ -292,9 +291,7 @@ fun SettingsScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .focusRequester(focusRequester)
-            .focusable(),
+            .padding(16.dp),
     ) {
         item {
             AnimatedVisibility(
@@ -676,7 +673,6 @@ fun SettingsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { isExpanded = !isExpanded }
-                                .focusRequester(resetCardFocusRequester)
                                 .focusable()
                                 .padding(bottom = 12.dp),
                             verticalAlignment = Alignment.CenterVertically
