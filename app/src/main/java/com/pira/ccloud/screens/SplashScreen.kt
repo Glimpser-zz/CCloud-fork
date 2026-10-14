@@ -114,7 +114,7 @@ fun SplashScreen(
             Spacer(modifier = Modifier.height(4.dp))
             
             Text(
-                text = "Developed by Hossein Pira",
+                text = "Fixed by Glimpser",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
