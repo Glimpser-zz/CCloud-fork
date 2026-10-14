@@ -65,6 +65,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -88,11 +89,17 @@ fun SearchScreen(
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-    
-    // Request focus and explicitly show the software keyboard on Android TV.
+    var searchFieldFocused by remember { mutableStateOf(false) }
+
+    // Focus first, then request the TV IME after Compose has established the input connection.
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-        keyboardController?.show()
+    }
+    LaunchedEffect(searchFieldFocused) {
+        if (searchFieldFocused) {
+            delay(300)
+            keyboardController?.show()
+        }
     }
     
     Column(
@@ -108,12 +115,7 @@ fun SearchScreen(
                 .fillMaxWidth()
                 .focusRequester(focusRequester)
                 .onFocusChanged { state ->
-                    if (state.isFocused) keyboardController?.show()
-                }
-                .clickable { 
-                    // Center/OK on the TV remote should open the on-screen keyboard.
-                    focusRequester.requestFocus()
-                    keyboardController?.show()
+                    searchFieldFocused = state.isFocused
                 },
             placeholder = { 
                 Text(
@@ -151,6 +153,7 @@ fun SearchScreen(
                 }
             },
             keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(
