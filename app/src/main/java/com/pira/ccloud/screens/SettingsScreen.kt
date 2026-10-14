@@ -1163,9 +1163,10 @@ fun ThemeModeOption(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .onFocusChanged { isFocused = it.isFocused }
             .clickable { onSelect(mode) }
-            .focusable()
             .focusRequester(focusRequester)
+            .focusable()
             .onKeyEvent { keyEvent ->
                 when (keyEvent.key) {
                     Key.Enter, Key.Spacebar -> {
@@ -1175,7 +1176,6 @@ fun ThemeModeOption(
                     else -> false // Let default handling occur
                 }
             }
-            .onFocusChanged { isFocused = it.isFocused }
             .background(
                 if (isFocused) MaterialTheme.colorScheme.primary.copy(alpha = 0.14f) else Color.Transparent,
                 RoundedCornerShape(8.dp)
@@ -1213,8 +1213,8 @@ fun ColorOption(
                 .size(48.dp)
                 .clip(CircleShape)
                 .background(color)
-                .clickable { onSelect(color) }
                 .onFocusChanged { isFocused = it.isFocused }
+                .clickable { onSelect(color) }
                 .focusRequester(focusRequester)
                 .focusable()
                 .border(
