@@ -349,9 +349,9 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { isExpanded = !isExpanded }
-                        .focusable()
+                        .onFocusChanged { isThemeCardFocused = it.isFocused }
                         .focusRequester(themeCardFocusRequester)
-                        .onFocusChanged { isThemeCardFocused = it.isFocused },
+                        .focusable(),
                     elevation = CardDefaults.cardElevation(defaultElevation = if (isThemeCardFocused) 10.dp else 4.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isThemeCardFocused) MaterialTheme.colorScheme.secondaryContainer else MaterialTheme.colorScheme.surface
@@ -1214,9 +1214,9 @@ fun ColorOption(
                 .clip(CircleShape)
                 .background(color)
                 .clickable { onSelect(color) }
-                .focusable()
-                .focusRequester(focusRequester)
                 .onFocusChanged { isFocused = it.isFocused }
+                .focusRequester(focusRequester)
+                .focusable()
                 .border(
                     width = if (isFocused) 3.dp else 0.dp,
                     color = MaterialTheme.colorScheme.primary,
